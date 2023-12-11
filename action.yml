@@ -1,0 +1,94 @@
+name: "Checkout, Setup, Publish and Deploy dotnet project"
+description: "Deploy projects directly to Simply IIS"
+inputs:
+  csproj-filepath:
+    description: 'The *.csproj to Deploy, Example: Solutionname\Projectname.csproj'
+    required: true
+    default: '8.0'
+  website-name:
+    description: "IIS website name"
+    required: true
+  server-computer-name:
+    description: "IIS server computer name"
+    required: true
+  server-username:
+    description: "IIS server username"
+    required: true
+  server-password:
+    description: "IIS server password"
+    required: true
+  source-path:
+    description: "The source directory for payload"
+    required: false
+    default: '\publish\'
+  target-path:
+    description: "The target directory for payload"
+    required: false
+    default: '""'
+  target-delete:
+    description: "Delete files on the destination computer that do not exist on the source computer"
+    required: false
+    default: "false"
+  skip-directory-path:
+    description: "Target a directory that any actions will be skipped on"
+    required: false
+    default: '""'
+  dotnet-version:
+    description: 'Optional SDK version(s) to use. If not provided, will install global.json version when available. Examples: 2.2.104, 3.1, 3.1.x, 3.x, 6.0.2xx'
+    required: false
+    default: '8.0'
+  dotnet-publish-verbosity:
+    description: 'Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic]. The default is minimal'
+    default: 'm'
+  dotnet-runtimeidentifier:
+    description: "See the [RID catalog](https://learn.microsoft.com/en-us/dotnet/core/rid-catalog)"
+    required: false
+    default: 'win-x86'
+  self-contained:
+    description: "Publish as self-contained"
+    required: false
+    default: 'true'
+runs:
+  using: "composite"
+  steps:
+    - name: git checkout default branch
+      uses: actions/checkout@v4
+    - name: dotnet setup
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ inputs.dotnet-version }}
+    - name: dotnet publish
+      run: dotnet publish ${{ inputs.csproj-filepath }} --configuration Release --output ./publish --nologo --runtime ${{ inputs.dotnet-runtimeidentifier }} --self-contained ${{ inputs.self-contained }} -p:PublishTrimmed=false -p:PublishSingleFile=false --verbosity ${{ inputs.dotnet-publish-verbosity }}
+    - name: Stop Application Pool
+      shell: pwsh
+      run: >
+        ${{ github.action_path }}/Scripts/Set-ApplicationPool.ps1
+        StopAppPool
+        ${{ inputs.website-name }}
+        ${{ inputs.server-computer-name }}
+        ${{ inputs.server-username }}
+        ${{ inputs.server-password }}
+    - name: Deploy Application
+      shell: pwsh
+      run: >
+        ${{ github.action_path }}/Scripts/Deploy-ApplicationPackage.ps1
+        ${{ inputs.source-path }}
+        ${{ inputs.target-path }}
+        ${{ inputs.website-name }}
+        ${{ inputs.server-computer-name }}
+        ${{ inputs.server-username }}
+        ${{ inputs.server-password }}
+        ${{ inputs.target-delete }}
+        ${{ inputs.skip-directory-path }}
+    - name: Start Application Pool
+      shell: pwsh
+      run: >
+        ${{ github.action_path }}/Scripts/Set-ApplicationPool.ps1
+        StartAppPool
+        ${{ inputs.website-name }}
+        ${{ inputs.server-computer-name }}
+        ${{ inputs.server-username }}
+        ${{ inputs.server-password }}
+branding:
+  icon: "sun"
+  color: "white"
