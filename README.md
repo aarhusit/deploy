@@ -15,11 +15,11 @@ jobs:
       - name: Deploy
         uses: aarhusit/deploy@main
         with:
-		  csproj-filepath: Solutionname\Projectname.csproj
-          website-name: 'Default Website'
+          csproj-filepath:      'Solutionname\Projectname.csproj'
+          website-name:         'Default Website'
           server-computer-name: 'https://server-computer-name.com:8172'
-          server-username: 'username'
-          server-password: ${{ secrets.PASSWORD }}
+          server-username:      'Username'
+          server-password:      ${{ secrets.PASSWORD }}
 ```
 
 ---

@@ -58,6 +58,7 @@ runs:
       with:
         dotnet-version: ${{ inputs.dotnet-version }}
     - name: dotnet publish
+      shell: pwsh
       run: dotnet publish ${{ inputs.csproj-filepath }} --configuration Release --output ./publish --nologo --runtime ${{ inputs.dotnet-runtimeidentifier }} --self-contained ${{ inputs.self-contained }} -p:PublishTrimmed=false -p:PublishSingleFile=false --verbosity ${{ inputs.dotnet-publish-verbosity }}
     - name: Stop Application Pool
       shell: pwsh
