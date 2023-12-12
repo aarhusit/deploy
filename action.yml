@@ -1,5 +1,5 @@
 name: "Checkout, Setup, Publish and Deploy dotnet project"
-description: "Deploy projects directly to Simply IIS"
+description: "All included to deploy a project to IIS, eg. SmarterASP.NET or Simply.com"
 inputs:
   csproj-filepath:
     description: 'The *.csproj to Deploy, Example: Solutionname\Projectname.csproj'
