@@ -68,7 +68,7 @@ runs:
       if: ${{ inputs.reset-application-pool == 'true' }}
       shell: pwsh
       run: >
-        ${{ github.action_path }}/Scripts/Set-ApplicationPool.ps1
+        ${{ github.action_path }}\Scripts\Set-ApplicationPool.ps1
         StopAppPool
         ${{ inputs.website-name }}
         ${{ inputs.server-computer-name }}
@@ -77,7 +77,7 @@ runs:
     - name: Deploy Application
       shell: pwsh
       run: >
-        ${{ github.action_path }}/Scripts/Deploy-ApplicationPackage.ps1
+        ${{ github.action_path }}\Scripts\Deploy-ApplicationPackage.ps1
         ${{ inputs.source-path }}
         ${{ inputs.target-path }}
         ${{ inputs.website-name }}
@@ -90,7 +90,7 @@ runs:
       if: ${{ inputs.reset-application-pool == 'true' }}
       shell: pwsh
       run: >
-        ${{ github.action_path }}/Scripts/Set-ApplicationPool.ps1
+        ${{ github.action_path }}\Scripts\Set-ApplicationPool.ps1
         StartAppPool
         ${{ inputs.website-name }}
         ${{ inputs.server-computer-name }}
