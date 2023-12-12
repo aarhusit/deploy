@@ -46,5 +46,6 @@ On GitHub, get on your repository’s page
 - Give a name to your secret (eg PASSWORD)
 - Enter the value of your secret
 - Click Add secret
+
 You can now use the secret as ${{secrets.*}} in your main.yml
 
