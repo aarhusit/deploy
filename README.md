@@ -4,22 +4,25 @@ Using a modified version of [rasmusbuchholdt/simply-web-deploy](https://github.c
 ### Example
 Place the following in `/.github/workflows/main.yml`
 ```yml
-name: Build project and deploy to Simply
-on: [push]
+name: Build and deploy
+on:
+  push:
+    branches:
+      - main
 
 jobs:
-  checkout_setup_publish_and_deploy:
-    name: Checkout, Setup, Publish and Deploy
+  checkout_publish_and_deploy:
+    name: Checkout, Publish and Deploy
     runs-on: windows-latest
     steps:
       - name: Deploy
         uses: aarhusit/deploy@main
         with:
-          csproj-filepath:      'Solutionname\Projectname.csproj'
-          website-name:         'Default Website'
-          server-computer-name: 'https://server-computer-name.com:8172'
-          server-username:      'Username'
-          server-password:      ${{ secrets.PASSWORD }}
+          csproj-filepath:      Solutionname\Projectname.csproj
+          website-name:         Default Website
+          server-computer-name: https://server-computer-name.com:1234
+          server-username:      username
+          server-password:      ${{secrets.PASSWORD}}
 ```
 
 ---
