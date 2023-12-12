@@ -1,7 +1,6 @@
 ## Checkout, Setup, Publish and Deploy dotnet project
 Using a modified version of [rasmusbuchholdt/simply-web-deploy](https://github.com/rasmusbuchholdt/simply-web-deploy).
-
-
+Where all steps from Checkout to Deploy is included.
 
 ---
 
