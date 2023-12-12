@@ -1,14 +1,14 @@
 
 $msdeploy = "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe";
 
-$source = $args[0]
-$destination = $args[1]
-$recycleApp = $args[2]
-$computerName = $args[3]
-$username = $args[4]
-$password = $args[5]
-$delete = $args[6]
-$skipDirectory = $args[7]
+$source        = $args[0] #source-path
+$destination   = $args[1] #target-path
+$recycleApp    = $args[2] #website-name
+$computerName  = $args[3] #server-computer-name
+$username      = $args[4] #server-username
+$password      = $args[5] #server-password
+$delete        = $args[6] #target-delete
+$skipDirectory = $args[7] #skip-directory-path
 
 $computerNameArgument = $computerName + '/MsDeploy.axd?site=' + $recycleApp
 
@@ -21,12 +21,17 @@ $targetPath = $recycleApp + $destination
 [System.Collections.ArrayList]$msdeployArguments = 
     "-verb:sync",
     "-allowUntrusted",
+    "-enableRule:AppOffline",
+    "-disableLink:AppPoolExtension",
+    "-disableLink:ContentExtension",
+    "-disableLink:CertificateExtension",
     "-source:contentPath=${contentPath}," +
     ("-dest:" + 
         "contentPath=${targetPath}," +
         "computerName=${computerNameArgument}," + 
         "username=${username}," +
         "password=${password}," +
+        "IncludeAcls='False'," +
         "AuthType='Basic'"
     )
 
