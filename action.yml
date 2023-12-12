@@ -48,6 +48,10 @@ inputs:
     description: "Publish as self-contained"
     required: false
     default: 'true'
+  reset-application-pool:
+    description: "Stop and start Application Pool before and after deploy, default is false"
+    required: false
+    default: 'false'
 runs:
   using: "composite"
   steps:
@@ -61,6 +65,7 @@ runs:
       shell: pwsh
       run: dotnet publish ${{ inputs.csproj-filepath }} --configuration Release --output ./publish --nologo --runtime ${{ inputs.dotnet-runtimeidentifier }} --self-contained ${{ inputs.self-contained }} -p:PublishTrimmed=false -p:PublishSingleFile=false --verbosity ${{ inputs.dotnet-publish-verbosity }}
     - name: Stop Application Pool
+      if: ${{ inputs.reset-application-pool == 'true' }}
       shell: pwsh
       run: >
         ${{ github.action_path }}/Scripts/Set-ApplicationPool.ps1
@@ -82,6 +87,7 @@ runs:
         ${{ inputs.target-delete }}
         ${{ inputs.skip-directory-path }}
     - name: Start Application Pool
+      if: ${{ inputs.reset-application-pool == 'true' }}
       shell: pwsh
       run: >
         ${{ github.action_path }}/Scripts/Set-ApplicationPool.ps1
