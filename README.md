@@ -4,7 +4,7 @@ Where all steps from Checkout to Deploy is included.
 
 ---
 
-# Examples
+# Example
 #### Checkout, Publish and Deploy to SmarterASP.NET
 
 Automatically deploy your net core project to SmarterASP.NET.
@@ -16,6 +16,7 @@ The job do:
 5. Deploy Application
 6. Start Application Pool (optional)
 
+Place the following in `/.github/workflows/main.yml`
 ```yml
 name: Publish via Web Deploy to smarterasp.net
 
@@ -38,3 +39,12 @@ jobs:
           server-username:      username-001
           server-password:      ${{secrets.PASSWORD}}
 ```
+
+#### Adding secrets to Github
+On GitHub, get on your repository’s page
+- Click Settings > Secrets and variables > Actions > New repository secret
+- Give a name to your secret (eg PASSWORD)
+- Enter the value of your secret
+- Click Add secret
+You can now use the secret as ${{secrets.*}} in your main.yml
+
