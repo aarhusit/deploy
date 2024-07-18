@@ -40,7 +40,7 @@ inputs:
     required: false
     default: 'win-x86'
   dotnet-install:
-    description: "Install dotnet via actions/setup-dotnet@v3 using [dotnet-version]. If you are using 'runs-on: windows-latest', net core 6,7 or 8 is already installed. Default false"
+    description: "Install dotnet via actions/setup-dotnet@v4 using [dotnet-version]. If you are using 'runs-on: windows-latest', net core 6,7 or 8 is already installed. Default false"
     required: false
     default: 'false'
   dotnet-version:
