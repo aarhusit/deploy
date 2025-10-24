@@ -56,7 +56,7 @@ inputs:
     required: false
     default: 'false'
   appsettings-json:
-    description: "Full JSON content of the appsettings.json file you want embedded before publish. (Use `${{ secrets.APPSETTINGS_JSON }}` at github.com -> Settings > Secrets and variables > Actions secrets and variables > Repository secrets > New repository secret)"
+    description: "Full JSON content of the appsettings.json file you want embedded before publish. (Use $${{ secrets.APPSETTINGS_JSON }} at github.com -> Settings > Secrets and variables > Actions secrets and variables > Repository secrets > New repository secret)"
     required: false
     default: ""
   appsettings-path:
