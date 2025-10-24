@@ -67,7 +67,7 @@ runs:
   using: "composite"
   steps:
     - name: git checkout default branch
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
     - name: use appsettings.json from secrets (if provided)
       if: ${{ inputs.appsettings-json != '' && inputs.appsettings-path != '' }}
       shell: pwsh
@@ -80,7 +80,7 @@ runs:
         Set-Content -Path $env:APPPATH -Value $env:APPCONTENT -NoNewline
     - name: dotnet setup
       if: ${{ inputs.dotnet-install == 'true' }}
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: ${{ inputs.dotnet-version }}
     - name: dotnet publish
