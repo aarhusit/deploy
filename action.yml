@@ -2,7 +2,7 @@ name: "Checkout, Setup, Publish and Deploy dotnet project"
 description: "All included to deploy a project to IIS, eg. SmarterASP.NET or Simply.com"
 inputs:
   csproj-filepath:
-    description: 'The *.csproj to Deploy, Example: Solutionname\Projectname.csproj'
+    description: 'The *.csproj to Deploy, Example: src\Solutionname\Projectname.csproj'
     required: true
   website-name:
     description: "IIS website name"
@@ -55,11 +55,29 @@ inputs:
     description: "Stop and start Application Pool before and after deploy, default is false"
     required: false
     default: 'false'
+  appsettings-json:
+    description: "Full JSON content of the appsettings.json file you want embedded before publish. (Use `${{ secrets.APPSETTINGS_JSON }}` at github.com -> Settings > Secrets and variables > Actions secrets and variables > Repository secrets > New repository secret)"
+    required: false
+    default: ""
+  appsettings-path:
+    description: "The path to write the contents of 'appsettings-json' to, Example: src\\Solutionname\\Projectname\\appsettings.json"
+    required: false
+    default: ""
 runs:
   using: "composite"
   steps:
     - name: git checkout default branch
       uses: actions/checkout@v4
+    - name: use appsettings.json from secrets (if provided)
+      if: ${{ inputs.appsettings-json != '' && inputs.appsettings-path != '' }}
+      shell: pwsh
+      env:
+        APPCONTENT: ${{ inputs.appsettings-json }}
+        APPPATH: ${{ inputs.appsettings-path }}
+      run: |
+        Write-Host "Writing appsettings to $env:APPPATH"
+        New-Item -ItemType Directory -Force -Path (Split-Path $env:APPPATH) | Out-Null
+        Set-Content -Path $env:APPPATH -Value $env:APPCONTENT -NoNewline
     - name: dotnet setup
       if: ${{ inputs.dotnet-install == 'true' }}
       uses: actions/setup-dotnet@v4

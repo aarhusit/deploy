@@ -10,11 +10,12 @@ Where all steps from Checkout to Deploy is included.
 Automatically deploy your net core project to SmarterASP.NET.
 The job do:
 1. git checkout default branch
-2. dotnet setup (optional)
-3. dotnet publish
-4. Stop Application Pool (optional)
-5. Deploy Application
-6. Start Application Pool (optional)
+2. use appsettings.json from secrets (optional)
+3. dotnet setup (optional)
+4. dotnet publish
+5. Stop Application Pool (optional)
+6. Deploy Application
+7. Start Application Pool (optional)
 
 Place the following in `/.github/workflows/main.yml`
 ```yml
@@ -24,6 +25,7 @@ on:
   push:
     branches:
       - main
+      - master
 
 jobs:
   checkout_publish_and_deploy:
@@ -33,19 +35,22 @@ jobs:
       - name: Deploy to SmarterASP.NET
         uses: aarhusit/deploy@main
         with:
-          csproj-filepath:      Solutionname\Projectname.csproj
+          csproj-filepath:      src\Solutionname\Projectname.csproj
           website-name:         username-001-site1
           server-computer-name: https://win1234.site4now.net:8172
           server-username:      username-001
-          server-password:      ${{secrets.PASSWORD}}
+          server-password:      ${{ secrets.PASSWORD }}
+
+          # (optional)
+          appsettings-json:    ${{ secrets.APPSETTINGS_JSON }}
+          appsettings-path:    src\Solutionname\Projectname\appsettings.json
 ```
 
 #### Adding secrets to Github
-On GitHub, get on your repository’s page
-- Click Settings > Secrets and variables > Actions > New repository secret
-- Give a name to your secret (eg PASSWORD)
-- Enter the value of your secret
-- Click Add secret
+On GitHub, get on your repository’s page:
+1. Click  Settings > Secrets and variables > Actions secrets and variables > Repository secrets > New repository secret
+2. Give a name to your secret (eg PASSWORD)
+3. Enter the value of your secret
+4. Click Add secret
 
 You can now use the secret as ${{secrets.*}} in your main.yml
-
